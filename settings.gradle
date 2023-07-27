@@ -1,0 +1,3 @@
+rootProject.name = "SmartNavSys"
+include ':app'
+include ':speedometer_module'

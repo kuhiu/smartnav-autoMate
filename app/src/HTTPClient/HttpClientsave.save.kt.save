@@ -1,0 +1,239 @@
+package HTTPClient
+
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.withLock
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.util.concurrent.atomic.AtomicInteger
+
+class APIRequester {
+    private var speed = AtomicInteger(0)
+    private var leftDistanceSensor = AtomicInteger(0)
+    private var centerDistanceSensor = AtomicInteger(0)
+    private var rightDistanceSensor = AtomicInteger(0)
+
+    private val client = OkHttpClient()
+    private val ip = "192.168.100.130"
+    private val port = "18080"
+
+    /**
+     *  Send all the requests to the server
+     *  each interval time.
+     */
+    @OptIn(DelicateCoroutinesApi::class)
+    fun start() {
+        val interval = 100L // 100 msec
+        val thread = Thread {
+            while (true) {
+                requestSpeed()
+                requestLeftDistanceSensor()
+                requestCenterDistanceSensor()
+                requestRightDistanceSensor()
+                Thread.sleep(interval)
+            }
+        }
+        thread.start()
+    }
+    /**
+     *  Get the speed from the
+     *  server.
+     */
+    private fun requestSpeed() {
+        val request = Request.Builder()
+            .url("$ip:$port/api/realtime/variables/speed")
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body?.string()
+                if (response.isSuccessful && responseBody != null) {
+                    val json = JSONObject(responseBody)
+                    speed.set(json.getInt("speed"))
+                    println("Velocidad: $speed")
+                } else {
+                    println("Error in the answer: ${response.code}")
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                println("Error in the request: ${e.message}")
+            }
+        })
+    }
+
+    /**
+     * Get the LeftDistanceSensor data from
+     * the server
+     */
+    private fun requestLeftDistanceSensor() {
+        val request = Request.Builder()
+            .url("$ip:$port/api/realtime/variables/leftDistanceSensor")
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body?.string()
+                if (response.isSuccessful && responseBody != null) {
+                    val json = JSONObject(responseBody)
+                    // e.g: Take the value of the speed
+                    leftDistanceSensor.set(json.getInt("leftDistanceSensor"))
+                    println("LeftDistanceSensor: $leftDistanceSensor")
+                } else {
+                    println("Error in the answer: ${response.code}")
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                println("Error in the request: ${e.message}")
+            }
+        })
+    }
+    /**
+     * Get the LeftDistanceSensor data from
+     * the server
+     */
+    private fun requestCenterDistanceSensor() {
+        val request = Request.Builder()
+            .url("$ip:$port/api/realtime/variables/centerDistanceSensor")
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body?.string()
+                if (response.isSuccessful && responseBody != null) {
+                    val json = JSONObject(responseBody)
+                    // e.g: Take the value of the speed
+                    centerDistanceSensor.set(json.getInt("centerDistanceSensor"))
+                    println("centerDistanceSensor: $centerDistanceSensor")
+                } else {
+                    println("Error in the answer: ${response.code}")
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                println("Error in the request: ${e.message}")
+            }
+        })
+    }
+    /**
+     * Get the RightDistanceSensor data from
+     * the server
+     */
+    private fun requestRightDistanceSensor() {
+        val request = Request.Builder()
+            .url("$ip:$port/api/realtime/variables/rightDistanceSensor")
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body?.string()
+                if (response.isSuccessful && responseBody != null) {
+                    val json = JSONObject(responseBody)
+                    // e.g: Take the value of the speed
+                    rightDistanceSensor.set(json.getInt("rightDistanceSensor"))
+                    println("rightDistanceSensor: $rightDistanceSensor")
+                } else {
+                    println("Error in the answer: ${response.code}")
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                println("Error in the request: ${e.message}")
+            }
+        })
+    }
+    /**
+     * Set the SmartEvasionStatus to request the
+     * SmartEvasion mode.
+     */
+    private fun requestSmartEvasionStatus(data_json : JSONObject) {
+        val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
+        val requestContent = data_json.toString().toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .url("$ip:$port/api/realtime/variables/smartEvasion/status")
+            .post(requestContent)
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body?.string()
+                if (response.isSuccessful && responseBody != null) {
+                    // The POST request was successful
+                    val jsonResponse = JSONObject(responseBody)
+                    println("Post request successful: $jsonResponse")
+                    // Process the server's response
+                    // ...
+                } else {
+                    println("Error en la respuesta: ${response.code}")
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                println("Error in the request: ${e.message}")
+            }
+        })
+    }
+    /**
+     *  Get the speed.
+     *
+     */
+    fun getSpeed(): Int {
+        return speed.get()
+    }
+    /**
+     * Get the distance from the left
+     * distance sensor.
+     */
+    fun getLeftDistanceSensor(): Int {
+        return leftDistanceSensor.get()
+    }
+    /**
+     * Get the distance from the center
+     * distance sensor.
+     */
+    fun getCenterDistanceSensor(): Int {
+        return centerDistanceSensor.get()
+    }
+    /**
+     * Get the distance from the left
+     * distance sensor.
+     */
+    fun getRightDistanceSensor(): Int {
+        return rightDistanceSensor.get()
+    }
+    /**
+     * Set the status of the SmartEvasion
+     * mode.
+     */
+    fun setSmartEvasionStatus() {
+        val data = JSONObject()
+        data.put("smartEvasionStatus", true)
+        requestSmartEvasionStatus(data)
+    }
+    /**
+     *
+     */
+    fun setSmartEvasionNewTarget() {
+
+    }
+
+    fun setSmartLightsStatus() {
+
+    }
+
+    fun setManualControlForward() {
+
+    }
+
+    fun setManualControlBack() {
+
+    }
+
+    fun setManualControlLeft() {
+
+    }
+
+    fun setManualControlRigth() {
+
+    }
+}
+

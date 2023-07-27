@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:speedometer="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textview_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:gravity="center|center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <ImageButton
+            android:id="@+id/button_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/button_play"
+            android:src="@android:drawable/ic_media_play"
+            android:text="@string/button_play" />
+
+        <ImageButton
+            android:id="@+id/button_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/button_stop"
+            android:src="@android:drawable/ic_media_pause"
+            android:text="@string/button_stop" />
+
+        <ImageButton
+            android:id="@+id/button_lights_on"
+            android:layout_width="51dp"
+            android:layout_height="52dp"
+            android:contentDescription="@string/button_stop"
+            android:src="@mipmap/lights_foreground"
+            android:text="@string/button_stop" />
+
+        <ImageButton
+            android:id="@+id/button_lights_off"
+            android:layout_width="51dp"
+            android:layout_height="52dp"
+            android:contentDescription="@string/button_stop"
+            android:src="@mipmap/lights_foreground"
+            android:text="@string/button_stop" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginRight="30dp"
+            android:translationX="20dp"
+            android:visibility="visible"
+            speedometer:srcCompat="@drawable/compass_icon" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <org.freedesktop.gstreamer.tutorials.tutorial_3.GStreamerSurfaceView
+            android:id="@+id/surface_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/linearlayout_pgbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/surface_video"
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:progressTint="@color/Red_colorAccent" />
+
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:progressTint="@color/Red_colorAccent" />
+
+            <ProgressBar
+                android:id="@+id/progressBar3"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:progressTint="@color/Red_colorAccent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/indicators_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/surface_video"
+            android:layout_alignParentBottom="false"
+            android:foregroundGravity="center"
+            android:orientation="horizontal">
+
+            <com.afra55.speedometer.SpeedometerDialog
+                android:id="@+id/test_speedometer"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                speedometer:meterBg="@drawable/dialog_bg_5"
+                speedometer:meterCenterDesc="km/h"
+                speedometer:meterDividerAreaNumber="10"
+                speedometer:meterHideCenterNumber="true"
+                speedometer:meterMaskBg="@drawable/dialog_mask_bg_5"
+                speedometer:meterNumberLimitTextColor="#E30808"
+                speedometer:meterNumberMargin="35dp"
+                speedometer:meterNumberSelectedTextColor="#FFFFFF"
+                speedometer:meterNumberTextColor="#4DFFFFFF"
+                speedometer:meterNumberTextSize="10sp"
+                speedometer:meterPointer="@drawable/dialog_pointer_5" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/controller_layout_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearlayout_pgbar"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="3dp"
+            android:gravity="left"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/up_direction"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:rotation="-90"
+                android:rotationY="0"
+                android:src="@android:drawable/ic_media_play"
+                android:text="@string/button_play"
+                android:translationX="100dp" />
+
+            <ImageButton
+                android:id="@+id/working_mode_default"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:rotation="90"
+                android:rotationY="0"
+                android:src="?android:attr/listChoiceIndicatorSingle"
+                android:text="Automatic control"
+                android:translationX="205dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/controller_layout_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/controller_layout_1"
+            android:gravity="left"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/left_direction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="-180"
+                android:src="@android:drawable/ic_media_play"
+                android:text="@string/button_play"
+                android:translationX="50dp" />
+
+            <ImageButton
+                android:id="@+id/right_direction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotationY="0"
+                android:src="@android:drawable/ic_media_play"
+                android:text="@string/button_play"
+                android:translationX="100dp" />
+
+            <ImageButton
+                android:id="@+id/working_mode_aut_evasion"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:rotation="90"
+                android:rotationY="0"
+                android:src="?android:attr/listChoiceIndicatorMultiple"
+                android:text="Automatic control"
+                android:translationX="150dp" />
+
+            <ImageButton
+                android:id="@+id/play_aut_evasion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/button_play"
+                android:src="@android:drawable/ic_media_play"
+                android:text="@string/button_play"
+                android:translationX="150dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/controller_layout_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/controller_layout_2"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="-3dp"
+            android:gravity="left"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/back_direction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="90"
+                android:rotationY="0"
+                android:src="@android:drawable/ic_media_play"
+                android:text="@string/button_play"
+                android:translationX="100dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

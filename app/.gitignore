@@ -1,0 +1,5 @@
+/build
+x86_64/libgstreamer_android.so
+x86/libgstreamer_android.so
+armeabi-v7a/libgstreamer_android.so
+arm64-v8a/libgstreamer_android.so

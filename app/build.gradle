@@ -1,0 +1,139 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'com.google.gms.google-services'
+
+android {
+    compileSdkVersion 33
+    viewBinding {
+        enabled = true
+    }
+    kapt {
+        correctErrorTypes true
+    }
+    defaultConfig {
+        applicationId "com.example.smartnavsys"
+        minSdkVersion 26
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+            ndkBuild {
+                def gstRoot
+
+                if (project.hasProperty('gstAndroidRoot'))
+                    gstRoot = project.gstAndroidRoot
+                else
+                    gstRoot = System.env.GSTREAMER_ROOT_ANDROID
+
+                arguments "NDK_APPLICATION_MK=src/com/example/smartnavsys/main/cpp/jni/Application.mk", "GSTREAMER_JAVA_SRC_DIR=src", "GSTREAMER_ROOT_ANDROID=$gstRoot", "GSTREAMER_ASSETS_DIR=src/assets"
+
+                targets "tutorial-3"
+
+                // All archs except MIPS and MIPS64 are supported
+                abiFilters  'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            }
+        }
+
+        // Set GSTREAMER_ROOT_ANDROID to the path where you unzipped the binaries
+        buildConfigField "String", "GSTREAMER_ROOT_ANDROID", "\"/media/kuhiu/5e8324a1-752c-4afa-961c-05d693d0ddc6/SmartNavSys/AndroidApp/SmartNavSystem/resources/gstreamer-1.0-android-universal-1.14.5\""
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            sourceSets {
+                main {
+                    manifest.srcFile 'src/com/example/smartnavsys/main/AndroidManifest.xml'
+                    java.srcDirs = ['src']
+                    resources.srcDirs = ['src']
+                    aidl.srcDirs = ['src']
+                    renderscript.srcDirs = ['src']
+                    res.srcDirs = ['res']
+                    assets.srcDirs = ['assets']
+                    res.srcDirs += ['../speedometer_module/src/main/res']
+                }
+            }
+        }
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/com/example/smartnavsys/main/cpp/jni/Android.mk'
+        }
+    }
+
+    namespace 'smartnavsys'
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kapt {
+        javacOptions {
+            option("-Xlint:deprecation")
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10"
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.2.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.room:room-runtime:2.5.1'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation project(path: ':speedometer_module')
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
+
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
+    kapt 'androidx.room:room-compiler:2.5.1'
+    kapt 'com.github.bumptech.glide:compiler:4.12.0'
+
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+
+    implementation "androidx.preference:preference-ktx:1.2.0"
+    implementation 'androidx.preference:preference-ktx:1.2.0'
+
+    //room
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+    implementation 'com.wajahatkarim3:roomexplorer:0.0.2'
+
+    // Http client
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+
+
+}
